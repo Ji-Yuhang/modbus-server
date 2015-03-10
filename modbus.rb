@@ -45,7 +45,7 @@ end
 
 server = TCPServer.open(localport)
 loop {
-    Thread.start(sersver.accept) do |client|
+    Thread.start(server.accept) do |client|
         loop {
             head = [0x15,0x01,0x00,0x00,0x00,0x06,0x01,0x03,0x00,0x00,0x00,0x40]
             re = head.pack("CCCC")
