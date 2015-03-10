@@ -36,24 +36,36 @@ option_parse = OptionParser.new do |opts|
 end.parse!
 
 #ap options
-pp options
+#pp options
 
 localport = 5555
 if options.has_key?(:port)
     localport = options[:port]
 end
 
+puts "listen port #{localport}"
 server = TCPServer.open(localport)
 loop {
     Thread.start(server.accept) do |client|
         loop {
             head = [0x15,0x01,0x00,0x00,0x00,0x06,0x01,0x03,0x00,0x00,0x00,0x40]
-            re = head.pack("CCCC")
+            #re = head.pack("CCCCCCCCCCCC")
+            re = head.pack("C*")
+            puts "send>"
             ap re
+	    ap re.class
+	    ap re.length
 
             client.write(re)
             receive = client.read()
+            puts "receive>"
             ap receive
+	    ap re.class
+	    ap receive.length
+	    ap receive.unpack("H*")
+	    ap receive.unpack("h*")
+	    #ap result.length
+            sleep(20)
         }
     end
 }
